@@ -6,6 +6,18 @@ and the physical behaviour of them thereof.
 #include <iostream>
 #include <cmath>
 
+/*
+###############
+### Structs ###
+###############
+*/
+
+/*
+#################
+### Functions ###
+#################
+*/
+
 float calc_refract_angle(float n1, float n2, float theta1){
   /*
   Calculates the refracted angle for a ray crossing a material boundary
@@ -28,6 +40,7 @@ float calc_refract_angle(float n1, float n2, float theta1){
     The refracted angle (to perpendicular to the boundary) of the exiting ray
     Unit: Radians
   */
+
   float theta2;
   bool add_pi;
 
@@ -52,9 +65,59 @@ float calc_refract_angle(float n1, float n2, float theta1){
   return theta2;
 }
 
+/*
+###############
+### Classes ###
+###############
+*/
+
+class vector{
+    /*
+    Vector class, since all coordinates will be in 2d cartesian coordinates
+    Can write function to rotate vectors, and other transforms which are useful
+    */
+  public:
+    float x;
+    float y;
+
+    vector operator + (vector param){
+      /*
+      Addition of 2 vectors
+      */
+      vector result(x + param.x,
+                    y + param.y);
+      return result;
+    }
+
+    vector operator - (vector param){
+      /*
+      Addition of 2 vectors
+      */
+      vector result(x - param.x,
+                    y - param.y);
+      return result;
+    }
+
+    vector rotate(float angle){
+      /*
+      Rotates a vector by an angle, clockwise (TODO: check this is clockwise)
+      Angle must be in radians
+      */
+      vector result;
+      result.x = x * cos(angle) + y * sin(angle);
+      result.y = y * cos(angle) - x * sin(angle);
+
+      return result;
+    }
+
+}
+
 int main()
 {
-
+  /*
+  This program will be structured as a module, for the start anyway
+  Intially main will be used as a debugging/ testing area, and can be ignored
+  */
   std::cout << calc_refract_angle(1.5, 1.0, 0.5)<< std::endl;
 
   return 0;
