@@ -80,12 +80,19 @@ class vector{
     float x;
     float y;
 
+    void set_values(float x_, float y_){
+      x = x_;
+      y = y_;
+    }
+
     vector operator + (vector param){
       /*
       Addition of 2 vectors
       */
-      vector result(x + param.x,
-                    y + param.y);
+      vector result;
+      result.x = x + param.x;
+      result.y = y + param.y;
+
       return result;
     }
 
@@ -93,8 +100,9 @@ class vector{
       /*
       Addition of 2 vectors
       */
-      vector result(x - param.x,
-                    y - param.y);
+      vector result;
+      result.x = x - param.x;
+      result.y = y - param.y;
       return result;
     }
 
@@ -110,7 +118,61 @@ class vector{
       return result;
     }
 
-}
+};
+
+class SimObj {
+  /*
+  Base class for most objects.
+  Mainly deals with coordinate transformation, which is needed for all objects
+  */
+
+  public:
+    vector centre;
+    float angle;
+
+    void set_values(vector centre_, float angle_){
+      centre = centre_;
+      angle = angle_;
+    }
+
+    vector getCentre(){
+      return centre;
+    }
+
+    float getAngle(){
+      return angle;
+    }
+
+    vector global_to_local_coords(vector coord){
+      /*
+      Turns (x, y) coordinate from the global frame, into the frame of the simobj
+      Does this by removing the centre of the SimObj, and then rotating
+      */
+      vector result;
+      result = coord - centre;
+      if (angle!= 0.0) {
+        result = result.rotate(angle);
+      }
+
+      return result;
+    }
+
+    vector local_to_global_coords(vector coord){
+      /*
+      Turns (x, y) coordinate from the local frame, into the global frame
+      Does this by removing the centre of the SimObj, and then rotating
+      */
+      vector result, origin;
+      origin.set_values(float(0.0), float(0.0));
+      result = coord - global_to_local_coords(origin);
+      if (angle!= 0.0) {
+        result = result.rotate(-angle);
+      }
+
+      return result;
+    }
+};
+
 
 int main()
 {
@@ -118,7 +180,19 @@ int main()
   This program will be structured as a module, for the start anyway
   Intially main will be used as a debugging/ testing area, and can be ignored
   */
-  std::cout << calc_refract_angle(1.5, 1.0, 0.5)<< std::endl;
+
+  vector testVec;
+  testVec.set_values(2.5, 3.5);
+  std::cout << testVec.rotate(M_PI).x << std::endl;
+  std::cout << testVec.rotate(M_PI).y << std::endl;
+
+  vector testObjCentre;
+  testObjCentre.set_values(2.5, 2.5);
+  SimObj testObj;
+  testObj.set_values(testObjCentre, M_PI_2);
+
+  std::cout << testObj.global_to_local_coords(testVec).x << std::endl;
+  std::cout << testObj.global_to_local_coords(testVec).y << std::endl;
 
   return 0;
 }
