@@ -5,6 +5,7 @@ and the physical behaviour of them thereof.
 
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
 
 /*
 ###############
@@ -63,6 +64,11 @@ float calc_refract_angle(float n1, float n2, float theta1){
     return NAN;
   }
   return theta2;
+}
+
+float pmma(float wavelength){
+  // TEMPORARY VALUE FOR DEUBGGING
+  return 1.5;
 }
 
 /*
@@ -205,7 +211,6 @@ class SimObj {
     }
 };
 
-
 class Ray: public SimObj{
 	/*
 		Ray creates a ray object defined by a origin and angle.With this you can get an x
@@ -289,8 +294,61 @@ class Ray: public SimObj{
 
 		return y_coord_;
 	}
+};
 
+class Interface: public SimObj{
+    /*
+    Base class for all interfaces in the simulation. Lens surfaces, flat surface, aperture etc
 
+      Parameters
+      ----------
+
+          n1:     float or string of valid material
+                  Refractive index or material before the interface
+
+          n2:     float or string of valid material
+                  Refractive index or material after the interface
+
+          centre = [0.0, 0.0]: [float, float]
+              Coordinates of the centre of the aperture
+
+          angle = 0.0: float in radians
+              Angle of the aperture to the vertical
+
+          element_height: default np.inf
+    */
+    public:
+      //n1 and n2 are both functions.
+      //They take wavelength as the argument and return refractive index of that wavelength
+      float (*n1)(float);
+      float (*n2)(float);
+      float element_height;
+
+    void set_values(vector centre_, float angle_ = 0.0,
+                    float (*n1_)(float) = pmma, float (*n2_)(float) = pmma,
+                    float element_height_ = NAN){
+      centre = centre_;
+      angle = angle_;
+      n1 = *n1_;
+      n2 = *n2_;
+      element_height = element_height_;
+    }
+
+    Ray transfer_func(Ray ray_){
+      throw std::logic_error("Interface requires valid transfer function");
+    }
+
+    float solve_for_x(float y_coord_){
+      throw std::logic_error("Interface requires valid sag function");
+    }
+
+    float tangent_angle(float y_coord_){
+      float diff_x = (solve_for_x(y_coord_ + 0.000001) -
+                      solve_for_x(y_coord_ - 0.000001)) / 0.000002;
+      float tangent = atan(diff_x);
+      tangent += angle;
+      return tangent;
+    }
 
 };
 
