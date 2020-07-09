@@ -6,6 +6,7 @@ and the physical behaviour of them thereof.
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
+#include <vector>
 
 /*
 ###############
@@ -123,6 +124,67 @@ class vector{
 
       return result;
     }
+
+};
+
+class hyperbolic_curve {
+  /*
+
+    A class with the attributes of a hyperbolic curve.
+    Contains a method to return the solution to that hyperbolic curve.
+
+    Attributes
+    ---------
+      r- float
+        radius of curvature at x=0
+
+      k- float
+        conic constant. k=-1 is a parabola, k=0 is a circle
+
+      poly_terms = std::vector
+
+  */
+public:
+  float r;
+  float k;
+  std::vector<float> poly_terms;
+
+  void set_values(float r_,
+                  float k_ = 0.0,
+                  std::vector<float> poly_terms_ = {0.0}){
+    r = r_;
+    k = k_;
+    poly_terms = poly_terms_;
+  }
+
+  float get_r(){
+    return r;
+  }
+
+  float get_k(){
+    return k;
+  }
+
+  std::vector<float> get_poly_terms(){
+    return poly_terms;
+  }
+
+  float solve_for_x(float y) {
+    //calculates the x coordinate of a conic section at y
+
+    float poly_correction = 0.0;
+    for(int i=0;
+        i< poly_terms.end()-poly_terms.begin();
+        i++) {
+      //Adds even powered terms (2, 4, 6... aka 2(i+1) i=0,1,2...)
+      poly_correction += poly_terms[i] * pow(y,2*(i+1));
+    }
+    float x_coord;
+    x_coord = pow(y, 2) / (r*(1 + std::sqrt(1-(1+k)*pow(y, 2)/pow(r, 2))));
+    x_coord += poly_correction;
+
+    return x_coord;
+  }
 
 };
 
@@ -459,6 +521,8 @@ int main()
   testVec.set_values(2.5, 3.5);
   std::cout << testVec.rotate(M_PI).x << std::endl;
   std::cout << testVec.rotate(M_PI).y << std::endl;
+  //-2.5
+  //-3.5
 
   vector testObjCentre;
   testObjCentre.set_values(2.5, 2.5);
@@ -467,24 +531,38 @@ int main()
 
   std::cout << testObj.global_to_local_coords(testVec).x << std::endl;
   std::cout << testObj.global_to_local_coords(testVec).y << std::endl;
+  //1
+  //0 or some kind of v.small float error (current 10^-8)
 
   Ray testRay;
   testRay.set_values(testVec, 1.0);
 
   std::cout << testRay.solve_for_y(3.0) << std::endl;
   std::cout << testRay.wavelength << std::endl;
+  //4.2787
+  //0.76
 
   Aperture testAperture;
   testAperture.set_values(testVec, 0.0);
 
   std::cout << testAperture.transfer_func(testRay).centre.x << std::endl;
   std::cout << testAperture.transfer_func(testRay).exists << std::endl;
+  //2.5
+  //true
 
   vector testVec2;
   testVec2.set_values(2.5, 5.5);
   Ray testRay2;
   testRay2.set_values(testVec2, 1.0);
   std::cout << testAperture.transfer_func(testRay2).exists << std::endl;
+  //false
+
+  hyperbolic_curve test_curve;
+  test_curve.set_values(1.0, 0.0);
+  std::cout << test_curve.solve_for_x(std::sqrt(0.5)) << std::endl;
+  //0.292893
+
+
 
   return 0;
 }
