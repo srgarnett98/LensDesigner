@@ -38,7 +38,7 @@ set_max_coords_from_y(float y) :
 
 */
 
-Ray::set_values(coord::vector centre_, float angle_ = 0.0,
+void Ray::set_values(coord::vector centre_, float angle_ = 0.0,
                 float wavelength_ = 0.76,
                 bool exists_ = true){
   SimObj::set_values(centre_, angle_);
@@ -46,25 +46,25 @@ Ray::set_values(coord::vector centre_, float angle_ = 0.0,
   exists = exists_;
 }
 
-Ray::set_max_coords_from_y(float y_coord_) {
+void Ray::set_max_coords_from_y(float y_coord_) {
 	max_coords.y = y_coord_;
 	max_coords.x = solve_for_x(y_coord_);
 }
 
-Ray::set_max_coords_from_x(float x_coord_) {
+void Ray::set_max_coords_from_x(float x_coord_) {
 	max_coords.x = x_coord_;
 	max_coords.y = solve_for_y(x_coord_);
 }
 
-Ray::get_wavelength() {
+float Ray::get_wavelength() {
 	return wavelength;
 }
 
-Ray::get_max_coords() {
+coord::vector Ray::get_max_coords() {
 	return max_coords;
 }
 
-Ray::solve_for_x(float y_coord_) {
+float Ray::solve_for_x(float y_coord_) {
 	//increase in x using tan(angle) = dy/dx where dy and dx are difference in y and x
 	float dx = (y_coord_ - centre.y) / tan(angle);
 	//add that increase to the starting x to find where the x coord is at that y.
@@ -73,7 +73,7 @@ Ray::solve_for_x(float y_coord_) {
 	return x_coord_;
 }
 
-Ray::solve_for_y(float x_coord_) {
+float Ray::solve_for_y(float x_coord_) {
 	//increase in y using tan(angle) = dy/dx where dy and dx are difference in y and x
 	float dy = (x_coord_ - centre.x) * tan(angle);
 	//add that increase to the starting y to find where the y coord is at that x.
