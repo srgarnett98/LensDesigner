@@ -3,7 +3,7 @@
 #include "/light/ray.hpp"
 
 namespace elements{
-  class Surface: public SimObj {
+  class Surface: public coord::SimObj {
     public:
       float element_height;
 
