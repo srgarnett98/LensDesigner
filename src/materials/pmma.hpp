@@ -1,1 +1,0 @@
-float pmma(float wavelength);

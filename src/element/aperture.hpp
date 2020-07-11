@@ -1,7 +1,9 @@
-#include "coord/vector.hpp"
-#include "elements/surface.hpp"
+#pragma once
 
-namespace elements{
+#include "coord/vector.hpp"
+#include "element/surface.hpp"
+
+namespace element{
   class Aperture: public coord::SimObj{
     public:
       float aperture_size;
@@ -13,5 +15,5 @@ namespace elements{
       light::Ray transfer_func(light::Ray ray_);
 
       float solve_for_x(float y);
-  }
-}
+  };
+};

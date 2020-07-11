@@ -1,3 +1,5 @@
+#pragma once
+
 #include "coord/vector.hpp"
 
 namespace curve{
@@ -7,7 +9,7 @@ namespace curve{
       float k;
       std::vector<float> poly_terms;
 
-      void set-values(float r_,
+      void set_values(float r_,
                       float k_ = 0.0,
                       std::vector<float> poly_terms = {0.0});
 
@@ -18,5 +20,5 @@ namespace curve{
       std::vector<float> get_poly_terms();
 
       float solve_for_x(float y);
-  }
-}
+  };
+};

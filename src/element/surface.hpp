@@ -1,8 +1,10 @@
-#include "/coord/vector.hpp"
-#include "/coord/simobj.hpp"
-#include "/light/ray.hpp"
+#pragma once
 
-namespace elements{
+#include "coord/vector.hpp"
+#include "coord/simobj.hpp"
+#include "light/ray.hpp"
+
+namespace element{
   class Surface: public coord::SimObj {
     public:
       float element_height;
@@ -16,5 +18,5 @@ namespace elements{
       float solve_for_x(float y_coord);
 
       float tangent_angle(float y_coord);
-  }
-}
+  };
+};

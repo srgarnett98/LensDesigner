@@ -1,3 +1,5 @@
+#pragma once
+
 namespace coord{
   class vector{
     public:
@@ -11,5 +13,5 @@ namespace coord{
       coord::vector operator - (coord::vector param);
 
       coord::vector rotate(float angle);
-  }
+  };
 };

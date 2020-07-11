@@ -1,3 +1,5 @@
+#pragma once
+
 #include "coord/simobj.hpp"
 #include "coord/vector.hpp"
 
@@ -25,4 +27,4 @@ namespace light{
 
     	float solve_for_y(float x_coord_);
   };
-}
+};

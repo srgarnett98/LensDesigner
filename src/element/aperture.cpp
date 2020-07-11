@@ -1,4 +1,4 @@
-#include "elements/aperture.hpp"
+#include "element/aperture.hpp"
 /*
 Creates an object representing an aperture, where light passes through a small
 hole in the centre
