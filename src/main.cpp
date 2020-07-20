@@ -26,7 +26,9 @@ int main()
 
   coord::vector testVec;
   testVec.set_values(2.5, 3.5);
+  std::cout << "Expected: -2.5" << std::endl;
   std::cout << testVec.rotate(M_PI).x << std::endl;
+  std::cout << "Expected: -3.5" << std::endl;
   std::cout << testVec.rotate(M_PI).y << std::endl;
   //-2.5
   //-3.5
@@ -36,7 +38,9 @@ int main()
   coord::SimObj testObj;
   testObj.set_values(testObjCentre, M_PI_2);
 
+  std::cout << "Expected: 1" << std::endl;
   std::cout << testObj.global_to_local_coords(testVec).x << std::endl;
+  std::cout << "Expected:0 or float errors" << std::endl;
   std::cout << testObj.global_to_local_coords(testVec).y << std::endl;
   //1
   //0 or some kind of v.small float error (current 10^-8)
@@ -44,7 +48,9 @@ int main()
   light::Ray testRay;
   testRay.set_values(testVec, 1.0, 0.76, true);
 
+  std::cout << "Expected: 4.2787" << std::endl;
   std::cout << testRay.solve_for_y(3.0) << std::endl;
+  std::cout << "Expected: 0.76" << std::endl;
   std::cout << testRay.wavelength << std::endl;
   //4.2787
   //0.76
@@ -52,7 +58,9 @@ int main()
   element::Aperture testAperture;
   testAperture.set_values(testVec, 0.0);
 
+  std::cout << "Expected: 2.5" << std::endl;
   std::cout << testAperture.transfer_func(testRay).centre.x << std::endl;
+  std::cout << "Expected: true or 1" << std::endl;
   std::cout << testAperture.transfer_func(testRay).exists << std::endl;
   //2.5
   //true
@@ -61,11 +69,13 @@ int main()
   testVec2.set_values(2.5, 5.5);
   light::Ray testRay2;
   testRay2.set_values(testVec2, 1.0);
+  std::cout << "Expected: false or 0" << std::endl;
   std::cout << testAperture.transfer_func(testRay2).exists << std::endl;
   //false
 
   curve::hyperbolic_curve test_curve;
   test_curve.set_values(1.0, 0.0);
+  std::cout << "Expected: 0.292893" << std::endl;
   std::cout << test_curve.solve_for_x(std::sqrt(0.5)) << std::endl;
   //0.292893
 
