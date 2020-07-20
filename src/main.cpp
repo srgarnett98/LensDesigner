@@ -42,7 +42,7 @@ int main()
   //0 or some kind of v.small float error (current 10^-8)
 
   light::Ray testRay;
-  testRay.set_values(testVec, 1.0);
+  testRay.set_values(testVec, 1.0, 0.76, true);
 
   std::cout << testRay.solve_for_y(3.0) << std::endl;
   std::cout << testRay.wavelength << std::endl;
