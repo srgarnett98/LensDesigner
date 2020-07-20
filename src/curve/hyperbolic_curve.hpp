@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cmath>
+#include <vector>
+
 #include "coord/vector.hpp"
 
 namespace curve{

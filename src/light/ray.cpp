@@ -1,4 +1,4 @@
-#include "ray.hpp"
+#include "light/ray.hpp"
 
 /*
   Ray creates a ray object defined by a origin and angle.With this you can get an x
@@ -38,33 +38,33 @@ set_max_coords_from_y(float y) :
 
 */
 
-void Ray::set_values(coord::vector centre_, float angle_ = 0.0,
-                float wavelength_ = 0.76,
-                bool exists_ = true){
+void light::Ray::set_values(coord::vector centre_, float angle_,
+                float wavelength_,
+                bool exists_){
   SimObj::set_values(centre_, angle_);
 	wavelength = wavelength_;
   exists = exists_;
 }
 
-void Ray::set_max_coords_from_y(float y_coord_) {
+void light::Ray::set_max_coords_from_y(float y_coord_) {
 	max_coords.y = y_coord_;
 	max_coords.x = solve_for_x(y_coord_);
 }
 
-void Ray::set_max_coords_from_x(float x_coord_) {
+void light::Ray::set_max_coords_from_x(float x_coord_) {
 	max_coords.x = x_coord_;
 	max_coords.y = solve_for_y(x_coord_);
 }
 
-float Ray::get_wavelength() {
+float light::Ray::get_wavelength() {
 	return wavelength;
 }
 
-coord::vector Ray::get_max_coords() {
+coord::vector light::Ray::get_max_coords() {
 	return max_coords;
 }
 
-float Ray::solve_for_x(float y_coord_) {
+float light::Ray::solve_for_x(float y_coord_) {
 	//increase in x using tan(angle) = dy/dx where dy and dx are difference in y and x
 	float dx = (y_coord_ - centre.y) / tan(angle);
 	//add that increase to the starting x to find where the x coord is at that y.
@@ -73,7 +73,7 @@ float Ray::solve_for_x(float y_coord_) {
 	return x_coord_;
 }
 
-float Ray::solve_for_y(float x_coord_) {
+float light::Ray::solve_for_y(float x_coord_) {
 	//increase in y using tan(angle) = dy/dx where dy and dx are difference in y and x
 	float dy = (x_coord_ - centre.x) * tan(angle);
 	//add that increase to the starting y to find where the y coord is at that x.

@@ -16,8 +16,8 @@
 
 */
 void curve::hyperbolic_curve::set_values(float r_,
-                float k_ = 0.0,
-                std::vector<float> poly_terms_ = {0.0}){
+                float k_,
+                std::vector<float> poly_terms_){
   r = r_;
   k = k_;
   poly_terms = poly_terms_;

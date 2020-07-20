@@ -4,7 +4,7 @@
 #include "element/surface.hpp"
 
 namespace element{
-  class Aperture: public coord::SimObj{
+  class Aperture: public element::Surface{
     public:
       float aperture_size;
 

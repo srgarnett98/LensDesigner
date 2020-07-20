@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "coord/simobj.hpp"
 #include "coord/vector.hpp"
 
@@ -11,7 +13,7 @@ namespace light{
       coord::vector max_coords;
       bool exists;
 
-      void set_values(coord::vector centre_, float angle_ = 0.0,
+      void set_values(coord::vector centre_, float angle_,
                       float wavelength = 0.76,
                       bool exists = true);
 

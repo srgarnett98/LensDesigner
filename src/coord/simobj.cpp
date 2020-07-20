@@ -1,4 +1,4 @@
-#include "coord/simobj"
+#include "coord/simobj.hpp"
 
 void coord::SimObj::set_values(coord::vector centre_, float angle_ = 0.0) {
   centre = centre_;

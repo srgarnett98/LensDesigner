@@ -9,7 +9,7 @@ namespace coord{
       float angle;
 
       void set_values(coord::vector centre_,
-                      float angle_ = 0.0);
+                      float angle_);
 
       coord::vector get_centre();
 

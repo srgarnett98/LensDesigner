@@ -41,14 +41,14 @@ Methods:
         blocked, with blocked rays being nan rays.
 */
 
-void elements::Aperture::set_values(vector centre_, float angle_,
-                float element_height_ = NAN,
-                float aperture_size_ = 1.0){
+void element::Aperture::set_values(coord::vector centre_, float angle_,
+                float element_height_,
+                float aperture_size_){
   Surface::set_values(centre_, angle_, element_height_);
   aperture_size = aperture_size_;
 }
 
-light::Ray elements::Aperture::transfer_func(light::Ray ray_){
+light::Ray element::Aperture::transfer_func(light::Ray ray_){
   /*
     Pass through aperture
     Blocks any rays (turns to null) if they don't go through the aperture, else
@@ -82,6 +82,6 @@ light::Ray elements::Aperture::transfer_func(light::Ray ray_){
     return new_ray;
 }
 
-float elements::Aperture::solve_for_x(float y) {
+float element::Aperture::solve_for_x(float y) {
   return 0.0;
 }
