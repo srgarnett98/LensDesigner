@@ -34,15 +34,57 @@ light::Ray element::Surface::transfer_func(light::Ray ray_){
   throw "Surface requires valid transfer function";
 }
 
-float element::Surface::solve_for_x(float y_coord_){
-  throw "Surface requires valid sag function";
+/*
+A single surface of medium change, presented as a lens surface
+
+  Parameters
+  ----------
+
+      centre = [0.0, 0.0]: [float, float]
+          Coordinates of the centre of the aperture
+
+      angle = 0.0: float in radians
+          Angle of the aperture to the vertical
+
+      element_height: default np.inf
+          A height of a lens or aperture etc.
+          Past this height the behaviour may be undefined
+
+      n1: pointer to function takes wavelength
+
+
+  Methods
+  ----------
+
+      tangent_angle:  float
+          Calculates the tangent to the Surface at a specified height
+*/
+
+void LensSurface::set_values(coord::vector centre_,
+                            float (*n1_)(float wavelength),
+                            float (*n2_)(float wavelength),
+                            float angle_ = 0.0,
+                            float element_height_ = NAN){
+  Surface::set_values(centre_, angle_, element_height_);
+  n1 = n1_;
+  n2 = n2_;
 }
 
-float element::Surface::tangent_angle(float y_coord_){
-  //TO BE REDONE WITH ANALYTIC SOLUTIONS IN HYPERBOLIC SURFACE DEF
-  float diff_x = (solve_for_x(y_coord_ + 0.000001) -
-                  solve_for_x(y_coord_ - 0.000001)) / 0.000002;
-  float tangent = atan(diff_x);
-  tangent += angle;
-  return tangent;
-}
+light::Ray transfer_func(light::Ray ray) override{
+  if (!ray.exists){
+    return ray;
+  }
+
+  float n1_val = n1(ray.wavelength);
+  float n2_val = n2(ray.wavelength);
+
+  coord::vector local_coords = global_to_local_coords(ray.centre);
+  float lens_normal = normal_angle(local_coords.y);
+  float angle_normal = ray.angle - lens_normal;
+  float angle_refract = behaviour::calc_refract_angle(n1_val, n2_val, angle_normal);
+  float new_ray_angle = angle_refract + lens_normal;
+
+  light::Ray new_ray = Ray();
+  new_ray.set-values(ray.centre, new_ray_angle, ray.wavelength, true);
+  return new_ray;
+};
