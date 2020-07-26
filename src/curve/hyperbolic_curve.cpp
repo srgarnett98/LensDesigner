@@ -1,20 +1,5 @@
 #include "curve/hyperbolic_curve.hpp"
-/*
 
-  A class with the attributes of a hyperbolic curve.
-  Contains a method to return the solution to that hyperbolic curve.
-
-  Attributes
-  ---------
-    r- float
-      radius of curvature at x=0
-
-    k- float
-      conic constant. k=-1 is a parabola, k=0 is a circle
-
-    poly_terms = std::vector
-
-*/
 void curve::hyperbolic_curve::set_values(float r_,
                 float k_,
                 std::vector<float> poly_terms_){
@@ -35,7 +20,7 @@ std::vector<float> curve::hyperbolic_curve::get_poly_terms(){
   return poly_terms;
 }
 
-float curve::hyperbolic_curve::solve_for_x(float y) {
+float curve::hyperbolic_curve::solve_for_x(float y) override{
   //calculates the x coordinate of a conic section at y
 
   float poly_correction = 0.0;

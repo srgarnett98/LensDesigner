@@ -4,9 +4,10 @@
 #include <vector>
 
 #include "coord/vector.hpp"
+#include "curve/geometry.hpp"
 
 namespace curve{
-  class hyperbolic_curve {
+  class hyperbolic_curve: public curve::Geometry {
     public:
       float r;
       float k;
@@ -22,6 +23,8 @@ namespace curve{
 
       std::vector<float> get_poly_terms();
 
-      float solve_for_x(float y);
+      float solve_for_x(float y) override;
+
+      float normal_angle(float y) override;
   };
 };
