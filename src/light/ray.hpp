@@ -12,6 +12,7 @@ namespace light{
       float wavelength;
       coord::vector max_coords;
       bool exists;
+      float tan_angle;
 
       void set_values(coord::vector centre_, float angle_,
                       float wavelength = 0.76,

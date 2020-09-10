@@ -42,6 +42,7 @@ void light::Ray::set_values(coord::vector centre_, float angle_,
                 float wavelength_,
                 bool exists_){
   SimObj::set_values(centre_, angle_);
+  tan_angle = tan(angle_);
 	wavelength = wavelength_;
   exists = exists_;
 }
@@ -66,7 +67,7 @@ coord::vector light::Ray::get_max_coords() {
 
 float light::Ray::solve_for_x(float y_coord_) {
 	//increase in x using tan(angle) = dy/dx where dy and dx are difference in y and x
-	float dx = (y_coord_ - centre.y) / tan(angle);
+	float dx = (y_coord_ - centre.y) / tan_angle;
 	//add that increase to the starting x to find where the x coord is at that y.
 	float x_coord_ = centre.x + dx;
 
