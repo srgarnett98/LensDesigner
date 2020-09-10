@@ -30,6 +30,19 @@ void element::Surface::set_values(coord::vector centre_,
   element_height = element_height_;
 }
 
+void element::Surface::set_geometry(curve::Geometry geometry_){
+
+}
+
+void element::Surface::generate_pos_list(){
+  for(unsigned i=0; i<N; i++){
+    coord::vector new_point;
+    new_point.y = i*element_height/N - element_height/2;
+    new_point.x = geometry.solve_for_x(new_point.y);
+    pos_list.insert(pos_list.end(), new_point)
+  }
+}
+
 light::Ray element::Surface::transfer_func(light::Ray ray_){
   throw "Surface requires valid transfer function";
 }
@@ -100,7 +113,7 @@ light::Ray Surface::LensSurface::transfer_func(light::Ray ray) override{
 
   //ray is not transformed out of global in "transfer to surface"
   //coord::vector local_coords = global_to_local_coords(ray.centre);
-  
+
   float lens_normal = normal_angle(local_coords.y);
   float angle_normal = ray.angle - lens_normal;
   float angle_refract = behaviour::calc_refract_angle(n1_val, n2_val, angle_normal);

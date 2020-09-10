@@ -12,6 +12,10 @@ namespace element{
     public:
       float element_height;
 
+      unsigned N_sections;
+
+      std::vector<coord::vector> pos_list;
+
       curve::Geometry *geometry;
 
       void set_values(coord::vector centre_,
@@ -19,6 +23,8 @@ namespace element{
                       float element_height_ = NAN);
 
       void set_geometry(curve::Geometry *shape);
+
+      void generate_pos_list();
 
       float sag_func(float y_coord);
 

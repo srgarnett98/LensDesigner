@@ -124,15 +124,15 @@ coord::vector behaviour::solve_intersect(light::Ray ray,
   bool success = false;
 
   //condition by which a solution is between index and index+1
-  bool bisect_condition(unsigned index, light::Ray ray, curve::Geometry geometry){
+  bool bisect_condition(unsigned index, light::Ray ray, element::Surface surface){
     //if index = (size-1), then index+1 = invalid index for std vector
-    if(index == (geometry.pos_list.size()-1)){
+    if(index == (surface.pos_list.size()-1)){
       return false;
     }
     //vec_i is vector position at index i
     //vec_i1 is vector position at index i+1
-    coord::vector vec_i = geometry.pos_list[i];
-    coord::vector vec_i1= geometry.pos_list[i+1];
+    coord::vector vec_i = surface.pos_list[i];
+    coord::vector vec_i1= surface.pos_list[i+1];
 
     //not both being same side of 0.
     //true if f(x_i) = +ve && f(x_i+1) = -ve
@@ -147,17 +147,17 @@ coord::vector behaviour::solve_intersect(light::Ray ray,
 
   //find ray angle, if 0-pi, looking from +y->-y, is pi-2pi, -y->+y
   if(ray.angle<M_PI && ray.angle>0){
-    for(unsigned i=0; i<(surface.geometry.pos_list.size()-1); i++){
-      if(bisect_condition(i, ray, surface.geometry)){
+    for(unsigned i=0; i<(surface.pos_list.size()-1); i++){
+      if(bisect_condition(i, ray, surface)){
         success_index = i;
         success = true;
         break;
       }
     }
   }else{
-    for(unsigned i=0; i<(surface.geometry.pos_list.size()-1); i++){
-      j = surface.geometry.pos_list.size()-i-2;
-      if(bisect_condition(j, ray, surface.geometry)){
+    for(unsigned i=0; i<(surface.pos_list.size()-1); i++){
+      j = surface.pos_list.size()-i-2;
+      if(bisect_condition(j, ray, surface)){
         success_index = j;
         success=true;
         break;
@@ -183,8 +183,8 @@ coord::vector behaviour::solve_intersect(light::Ray ray,
   fg eq_to_solve;
   fg.set_values(ray.solve_for_x, surface.geometry.solve_for_y);
 
-  float y1 = surface.geometry.pos_list[success_index].y;
-  float y2 = surface.geometry.pos_list[success_index+1].y;
+  float y1 = surface.pos_list[success_index].y;
+  float y2 = surface.pos_list[success_index+1].y;
 
   //force first argument to be +ve, second to be -ve
   if(fg.f_subtract_g(y1) > 0){
