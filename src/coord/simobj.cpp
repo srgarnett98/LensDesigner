@@ -2,7 +2,13 @@
 
 void coord::SimObj::set_values(coord::vector centre_, float angle_ = 0.0) {
   centre = centre_;
-  angle = angle_;
+  double constrainAngle(double x){
+    x = fmod(x + M_PI,M_PI_2);
+    if (x < 0)
+        x += M_PI_2;
+    return x - M_PI;
+  }
+  angle = constrainAngle(angle_);
 }
 
 coord::vector coord::SimObj::get_centre(){
