@@ -98,7 +98,9 @@ light::Ray Surface::LensSurface::transfer_func(light::Ray ray) override{
   float n1_val = n1(ray.wavelength);
   float n2_val = n2(ray.wavelength);
 
-  coord::vector local_coords = global_to_local_coords(ray.centre);
+  //ray is not transformed out of global in "transfer to surface"
+  //coord::vector local_coords = global_to_local_coords(ray.centre);
+  
   float lens_normal = normal_angle(local_coords.y);
   float angle_normal = ray.angle - lens_normal;
   float angle_refract = behaviour::calc_refract_angle(n1_val, n2_val, angle_normal);
