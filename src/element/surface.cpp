@@ -82,14 +82,15 @@ A single surface of medium change, presented as a lens surface
 void LensSurface::set_values(coord::vector centre_,
                             float (*n1_)(float wavelength),
                             float (*n2_)(float wavelength),
-                            float angle_ = 0.0,
-                            float element_height_ = NAN){
+                            curve::Geometry geometry_,
+                            float angle_,
+                            float element_height_){
   Surface::set_values(centre_, angle_, element_height_);
   n1 = n1_;
   n2 = n2_;
 }
 
-light::Ray transfer_func(light::Ray ray) override{
+light::Ray Surface::LensSurface::transfer_func(light::Ray ray) override{
   if (!ray.exists){
     return ray;
   }
