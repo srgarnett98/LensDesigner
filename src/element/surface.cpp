@@ -110,3 +110,29 @@ light::Ray Surface::LensSurface::transfer_func(light::Ray ray) override{
   new_ray.set-values(ray.centre, new_ray_angle, ray.wavelength, true);
   return new_ray;
 };
+
+void Mirror::set_values(coord::vector centre_,
+                        curve::Geometry geometry_,
+                            float angle_,
+                            float element_height_){
+  Surface::set_values(centre_, angle_, element_height_);
+}
+
+light::Ray Surface::Mirror::transfer_func(light::Ray ray) override{
+  if (!ray.exists){
+    return ray;
+  }
+
+  //ray is not transformed out of global in "transfer to surface"
+  //coord::vector local_coords = global_to_local_coords(ray.centre);
+
+  float mirror_normal = normal_angle(local_coords.y);
+  float angle_normal = ray.angle - mirror_normal;
+  //is calculate reflect angle just ang;e = - angle?
+  float angle_refract = behaviour::calc_reflect_angle(angle_normal);
+  float new_ray_angle = angle_refract + mirror_normal;
+
+  light::Ray new_ray = Ray();
+  new_ray.set-values(ray.centre, new_ray_angle, ray.wavelength, true);
+  return new_ray;
+};

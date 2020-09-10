@@ -39,9 +39,21 @@ namespace element{
       void set_values(coord::vector centre_,
                       float (*n1_)(float wavelength),
                       float (*n2_)(float wavelength),
+                      curve::Geometry geometry_ = curve::flat(),
                       float angle_ = 0.0,
-                      float element_height_ = NAN)
+                      float element_height_ = NAN);
 
       light::Ray transfer_func(light::Ray ray) override;
   };
+
+  class Mirror: public element::Surface {
+  public:
+
+    void set_values(coord::vector centre_,
+                    curve::Geometry geometry_ = curve::flat(),
+                    float angle_ = 0.0,
+                    float element_height_ = NAN);
+
+    light::Ray transfer_func(light::Ray ray) override;
+  }
 };
