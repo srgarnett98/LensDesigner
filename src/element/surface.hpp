@@ -20,7 +20,8 @@ namespace element{
 
       void set_values(coord::vector centre_,
                       float angle_ = 0.0,
-                      float element_height_ = NAN);
+                      float element_height_ = 1.0,
+                      unsigned int N_sections_ = 1);
 
       void set_geometry(curve::Geometry *shape);
 
@@ -47,7 +48,8 @@ namespace element{
                       float (*n2_)(float wavelength),
                       curve::Geometry geometry_ = curve::flat(),
                       float angle_ = 0.0,
-                      float element_height_ = NAN);
+                      float element_height_ = 1.0,
+                      unsigned int N_sections_ = 1);
 
       light::Ray transfer_func(light::Ray ray) override;
   };
@@ -58,7 +60,8 @@ namespace element{
     void set_values(coord::vector centre_,
                     curve::Geometry geometry_ = curve::flat(),
                     float angle_ = 0.0,
-                    float element_height_ = NAN);
+                    float element_height_ = 1.0,
+                    unsigned int N_sections_ = 1);
 
     light::Ray transfer_func(light::Ray ray) override;
   }

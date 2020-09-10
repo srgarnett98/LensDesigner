@@ -24,10 +24,12 @@ Base class for all Surfaces in the simulation. Lens surfaces, flat surface, aper
 
 void element::Surface::set_values(coord::vector centre_,
                                    float angle_,
-                                   float element_height_){
+                                   float element_height_,
+                                  unsigned int N_sections_){
   centre = centre_;
   angle = angle_;
   element_height = element_height_;
+  N_sections = N_sections_
 }
 
 void element::Surface::set_geometry(curve::Geometry geometry_){
@@ -97,8 +99,9 @@ void LensSurface::set_values(coord::vector centre_,
                             float (*n2_)(float wavelength),
                             curve::Geometry geometry_,
                             float angle_,
-                            float element_height_){
-  Surface::set_values(centre_, angle_, element_height_);
+                            float element_height_,
+                            unsigned int N_sections_){
+  Surface::set_values(centre_, angle_, element_height_, N_sections_);
   n1 = n1_;
   n2 = n2_;
 }
@@ -126,9 +129,10 @@ light::Ray Surface::LensSurface::transfer_func(light::Ray ray) override{
 
 void Mirror::set_values(coord::vector centre_,
                         curve::Geometry geometry_,
-                            float angle_,
-                            float element_height_){
-  Surface::set_values(centre_, angle_, element_height_);
+                        float angle_,
+                        float element_height_,
+                        unsigned int N_sections_){
+  Surface::set_values(centre_, angle_, element_height_, N_sections_);
 }
 
 light::Ray Surface::Mirror::transfer_func(light::Ray ray) override{

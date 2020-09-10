@@ -120,11 +120,11 @@ coord::vector behaviour::solve_intersect(light::Ray ray,
     return sol;
   }
 
-  unsigned success_index;
+  unsigned int success_index;
   bool success = false;
 
   //condition by which a solution is between index and index+1
-  bool bisect_condition(unsigned index, light::Ray ray, element::Surface surface){
+  bool bisect_condition(unsigned int index, light::Ray ray, element::Surface surface){
     //if index = (size-1), then index+1 = invalid index for std vector
     if(index == (surface.pos_list.size()-1)){
       return false;
@@ -147,7 +147,7 @@ coord::vector behaviour::solve_intersect(light::Ray ray,
 
   //find ray angle, if 0-pi, looking from +y->-y, is pi-2pi, -y->+y
   if(ray.angle<M_PI && ray.angle>0){
-    for(unsigned i=0; i<(surface.pos_list.size()-1); i++){
+    for(unsigned int i=0; i<(surface.pos_list.size()-1); i++){
       if(bisect_condition(i, ray, surface)){
         success_index = i;
         success = true;
@@ -155,7 +155,7 @@ coord::vector behaviour::solve_intersect(light::Ray ray,
       }
     }
   }else{
-    for(unsigned i=0; i<(surface.pos_list.size()-1); i++){
+    for(unsigned int i=0; i<(surface.pos_list.size()-1); i++){
       j = surface.pos_list.size()-i-2;
       if(bisect_condition(j, ray, surface)){
         success_index = j;
