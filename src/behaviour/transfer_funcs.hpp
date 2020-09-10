@@ -2,6 +2,10 @@
 
 #include <cmath>
 
+#include "coord/vector.hpp"
+#include "element/surface.hpp"
+#include "light/ray.hpp"
+
 namespace behaviour{
   float calc_refract_angle(float n1, float n2, float theta1);
 
