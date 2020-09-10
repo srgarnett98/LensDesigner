@@ -3,6 +3,8 @@
 #include "coord/vector.hpp"
 #include "coord/simobj.hpp"
 #include "light/ray.hpp"
+#include "curve/geometry.hpp"
+#include "curve/curves.hpp"
 #include "behaviour/transfer_funcs.hpp"
 
 namespace element{
@@ -10,7 +12,7 @@ namespace element{
     public:
       float element_height;
 
-      curve::Geometry *shape;
+      curve::Geometry *geometry;
 
       void set_values(coord::vector centre_,
                       float angle_ = 0.0,
@@ -21,6 +23,10 @@ namespace element{
       float sag_func(float y_coord);
 
       float tangent_angle(float y_coord);
+
+      light::Ray global_to_local_ray(light::Ray ray);
+
+      light::Ray local_to_global_ray(light::Ray ray);
 
       virtual light::Ray transfer_func(light::Ray ray);
   };
