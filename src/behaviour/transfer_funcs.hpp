@@ -8,5 +8,6 @@ namespace behaviour{
   float calc_reflect_angle(float theta1);
 
   light::Ray transfer_to_surface(light::Ray ray,
-                                 element::Surface surface);
+                                 element::Surface surface,
+                                 float epsilon);
 };

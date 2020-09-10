@@ -55,93 +55,147 @@ float behaviour::calc_reflect_angle(float theta1){
 light::Ray behaviour::transfer_to_surface(light::Ray ray
                                           element::Surface surface){
   light::Ray local_ray = surface.global_to_local_ray(ray);
+  if(!local_ray.exists){
+    return local_ray;
+  }
   //find some way to pass pointers to each functions solve for x
   //solve intersect runs an optimised solver for f1-f2=0
   //ensure solve intersect finds the best solution
   //so solution closest to ray.centre.
-  coord::vector sol = solve_intersect(local_ray.solve_for_x,
-                                      surface.geometry.solve_for_x,
-                                      locay_ray.centre);
+  coord::vector sol = solve_intersect(local_ray,
+                                      surface,
+                                      surface.epsilon);
   light::Ray new_ray;
-  new_ray.centre = sol;
-  new_ray.angle=local_ray.angle;
+  new_ray.set_values(sol, ray.angle, ray.wavelength, ray.exists);
 
   return new_ray;
 }
 
-class fg{
-  public:
-    float (*f)(float y);
-    float (*g)(float y);
-
-    float f_subtract_g(float y){
-      return f(y) - g(y);
-    }
-}
-
 coord::vector behaviour::solve_intersect(light::Ray ray,
-                                         curve::Surface surface) {
+                                         curve::Surface surface,
+                                         float epsilon) {
+
   /*
-  pseudocode ideas:
-  dissection into small elements
-  For each lens surface, define a minimum resolution
-  split the lens into small linear sections, based on the minimum resolution
-  check through all small sections, whether intersection occurs
-  Will always find all roots.
-  relatively constant runtime, lots of work is front-loaded
-  translates to 3d well, define surface as a FEM triangle thingy
-  O(n segments)
-  could reduce number of segments it needs to check?
-  will require user to input resolution and element width.
-
-
-  so I have a list of (x,y) coords
-  how can I efficiently say which pair of (x1,y1)->(x2,y2) coords
-  intersects with a straight line.
-
-  couple method with bisection method?
-  go through surface element list, find where dy/dx = angle of ray
-  split surface up at these parallel points. Check whether the ray is in each section
-  if yes, pick first intersection point (ez)
-  bisect and repeat
-
-  bisect section doesnt need to use the surface list shit?
-  once we KNOW the ray intersects in that region, can use normal bisection.
+  Uses a pregenerated list of solutions to find rough positions of solutions
+  then performs a bisect in order to get the correct level of accuracy.
   */
-  //find indexes where surface is parallel with ray
-  //quite a big ask?
-  // if I'm finding where dy/dx-angle =0, might as well solve  the damn thing
-  int success_index;
-  float ray_distance;
-  float ray_distance2;
-  for(unsigned i=0, i<(surface.geometry.angle_list.size()-1), i++){
-    if(not((surface.geometry.pos_list[i].x-ray.solve_for_x(surface.geometry.pos_list[i].y) > 0) ==
-       (surface.geometry.pos_list[i].x-ray.solve_for_x(surface.geometry.pos_list[i].y)>0))){
-      ray_distance2= sqrt(geometry.pos_list[i]-geometry)
+
+  // class to turnn 2 functions into a singular one
+  //takes the two functions as attributes
+  class fg{
+    public:
+      float (*f)(float y);
+      float (*g)(float y);
+
+      float f_subtract_g(float y){
+        return f(y) - g(y);
+      }
+  };
+
+  // function that performs a bisection function solve on a range.
+  float bisect(float y1, float y2,
+               float (*function)(float y),
+               float epsilon){
+    float sol;
+
+    //midpoint
+    float inter_y = (y1+y2)/2.0;
+    float inter_sol = function(inter_y);
+
+    //if the sides are very close, return intermediate point
+    if((abs(y1-y2) < epsilon) || (inter_sol == 0.0)){
+      return inter_y;
+    }
+
+    //if solution between y1 and inter_y, repeat bisect on first half
+    if(inter_sol<0){
+      sol = bisect(y1, inter_y, function, epsilon);
+
+    //else if solution between y2 and inter_y, repeat bisect on second half
+    }else if(inter_sol>0){
+      sol = bisect(inter_y, y2, function, epsilon);
+    }
+
+    //eventually one bisect will return a value, will cascade to this return
+    return sol;
+  }
+
+  unsigned success_index;
+  bool success = false;
+
+  //condition by which a solution is between index and index+1
+  bool bisect_condition(unsigned index, light::Ray ray, curve::Geometry geometry){
+    //if index = (size-1), then index+1 = invalid index for std vector
+    if(index == (geometry.pos_list.size()-1)){
+      return false;
+    }
+    //vec_i is vector position at index i
+    //vec_i1 is vector position at index i+1
+    coord::vector vec_i = geometry.pos_list[i];
+    coord::vector vec_i1= geometry.pos_list[i+1];
+
+    //not both being same side of 0.
+    //true if f(x_i) = +ve && f(x_i+1) = -ve
+    //or vice versa
+    bool cond = !(
+      (vec_i.x-ray.solve_for_x(vec_i.y) > 0)
+      ==
+      (vec_i1.x-ray.solve_for_x(vec_i1.y) > 0)
+    );
+    return cond;
+  }
+
+  //find ray angle, if 0-pi, looking from +y->-y, is pi-2pi, -y->+y
+  if(ray.angle<M_PI && ray.angle>0){
+    for(unsigned i=0; i<(surface.geometry.pos_list.size()-1); i++){
+      if(bisect_condition(i, ray, surface.geometry)){
+        success_index = i;
+        success = true;
+        break;
+      }
+    }
+  }else{
+    for(unsigned i=0; i<(surface.geometry.pos_list.size()-1); i++){
+      j = surface.geometry.pos_list.size()-i-2;
+      if(bisect_condition(j, ray, surface.geometry)){
+        success_index = j;
+        success=true;
+        break;
+      }
     }
   }
 
   //if no successes, return null
-  if(segment_success.size()==0){
+  if(!success){
     coord::vector intersection;
     intersection.x = NAN;
     intersection.y = NAN;
     return intersection;
   //many successes, need to find correct
-  } elif(segment_success.size() != 1){
-    find_closest_segment();
-  } else{
-    float y1 = segment_y_coords[segment_success[0]];
-    float y2 = segement_y_coords[segment_success[1]];
   }
-  //passes through if only 1 success
-
-
 
   //bisect correct segment
   //is this really necessary if the resolution is defined well?
   //maybe linearly interpolate between the successful segments?
+
+  //construct singular function which needs to be solved
+  float y_sol;
   fg eq_to_solve;
   fg.set_values(ray.solve_for_x, surface.geometry.solve_for_y);
-  bisect(fg.f_subtract_g, y1, y2, epsilon)
+
+  float y1 = surface.geometry.pos_list[success_index].y;
+  float y2 = surface.geometry.pos_list[success_index+1].y;
+
+  //force first argument to be +ve, second to be -ve
+  if(fg.f_subtract_g(y1) > 0){
+    y_sol = bisect(y1, y2, fg.f_subtract_g, epsilon);
+  }else{
+    y_sol = bisect(y2, y1, fg.f_subtract_g, epsilon);
+  }
+
+
+  coord::vector new_coords;
+  new_coords.set_values(ray.solve_for_x(y_sol), y_sol);
+  return new_coords;
+
 }
