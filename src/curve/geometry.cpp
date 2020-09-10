@@ -5,6 +5,5 @@ virtual float curve::Geometry::normal_angle(float y_coord_, float diff_step = 0.
   float diff_x = (solve_for_x(y_coord_ + diff_step) -
                   solve_for_x(y_coord_ - diff_step)) / (2*diff_step);
   float tangent = atan(diff_x);
-  tangent += angle;
   return tangent;
 }
