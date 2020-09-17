@@ -18,18 +18,27 @@ namespace element{
 
       curve::Geometry *geometry;
 
+      //not used on the surface level, but need to be initialized for lenssurface
+      float (*n1)(float wavelength);
+      float (*n2)(float wavelength);
+
+      //needed for aperture
+      float aperture_size;
+
       void set_values(coord::vector centre_,
+                      curve::Geometry geometry = curve::flat(),
                       float angle_ = 0.0,
                       float element_height_ = 1.0,
                       unsigned int N_sections_ = 1);
 
       void set_geometry(curve::Geometry *shape);
 
+      void set_materials(float (*n1_)(float wavelength),
+                         float (*n2_)(float wavelength));
+
+      void set_aperture_size(float aperture_size_);
+
       void generate_pos_list();
-
-      float sag_func(float y_coord);
-
-      float tangent_angle(float y_coord);
 
       light::Ray global_to_local_ray(light::Ray ray);
 
@@ -40,16 +49,9 @@ namespace element{
 
   class LensSurface: public element::Surface {
     public:
+      //dont need to redefine attrs?
       float (*n1)(float wavelength);
       float (*n2)(float wavelength);
-
-      void set_values(coord::vector centre_,
-                      float (*n1_)(float wavelength),
-                      float (*n2_)(float wavelength),
-                      curve::Geometry geometry_ = curve::flat(),
-                      float angle_ = 0.0,
-                      float element_height_ = 1.0,
-                      unsigned int N_sections_ = 1);
 
       light::Ray transfer_func(light::Ray ray) override;
   };
@@ -57,14 +59,7 @@ namespace element{
   class Mirror: public element::Surface {
   public:
 
-    void set_values(coord::vector centre_,
-                    curve::Geometry geometry_ = curve::flat(),
-                    float angle_ = 0.0,
-                    float element_height_ = 1.0,
-                    unsigned int N_sections_ = 1);
-
     light::Ray transfer_func(light::Ray ray) override;
-  }
   };
 
   class Aperture: public element::Surface{
