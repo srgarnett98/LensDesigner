@@ -72,7 +72,7 @@ light::Ray behaviour::transfer_to_surface(light::Ray ray
 }
 
 coord::vector behaviour::solve_intersect(light::Ray ray,
-                                         curve::Surface surface,
+                                         curve::Geometry surface,
                                          float epsilon) {
 
   /*
