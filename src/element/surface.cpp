@@ -153,3 +153,36 @@ light::Ray Surface::Mirror::transfer_func(light::Ray ray) override{
   new_ray.set-values(ray.centre, new_ray_angle, ray.wavelength, true);
   return new_ray;
 };
+
+
+light::Ray element::Aperture::transfer_func(light::Ray ray_){
+  /*
+    Pass through aperture
+    Blocks any rays (turns to null) if they don't go through the aperture, else
+    propogates those rays
+
+    Params
+    ------------
+        ray_:       Ray
+            Incident ray on the aperture
+
+    Returns
+    -------------
+        new_ray:    Ray
+            Either the same ray as incident, if it would pass through the aperture,
+            or a nan ray, where all its properties are nans
+    */
+    light::Ray new_ray;
+    if (!ray_.exists) {
+      return ray_;
+    }
+
+    if (aperture_size / 2.0 > abs(local_coords.y)) {
+      new_ray = ray_;
+    } else {
+      ray_.exists = false;
+      new_ray = local_to_global_ray(ray_);
+    }
+
+    return new_ray;
+}

@@ -65,4 +65,13 @@ namespace element{
 
     light::Ray transfer_func(light::Ray ray) override;
   }
+  };
+
+  class Aperture: public element::Surface{
+    public:
+      //dont need to redefine attrs?
+      float aperture_size;
+
+      light::Ray transfer_func(light::Ray ray_);
+  };
 };
