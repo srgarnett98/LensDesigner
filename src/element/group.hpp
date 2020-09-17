@@ -31,6 +31,10 @@ namespace element{
       std::vector<light::ray> transfer_single_ray(light::Ray ray);
 
       std::vector<std::vector<light::Ray>> transfer_packet(std::vector<light::Ray> init_rays);
+
+      //Would love a function where I can transfer light packet
+      //but only for the last few surfaces
+      //so if a later surface is changed, you dont need to simualte them all.
   };
 
   //lens not a separate class, instead a utility to make a group class?

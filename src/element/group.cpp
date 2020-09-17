@@ -67,3 +67,28 @@ element::Group element::Group::pop_Group(std::vector<int> index_list){
 
   return new_group;
 }
+
+std::vector<std::vector<light::Ray>> element::Group::transfer_packet(std::vector<light::Ray> init_rays){
+  std::vector<std::vector<light::Ray>> total_rays;
+
+  for(int i=0; i<init_rays.size(); i++){
+    total_rays[0][i] = global_to_local_ray(init_rays[i]);
+  }
+
+  //extend total rays to the right size?
+  //or append at every stage?
+
+  for(int i=0; i<surfaces.size(); i++){
+    for(int j=0; j<total_rays[i].size(); j++){
+      total_rays[i+1].append(surfaces[i]->transfer_func(total_rays[i][j]));
+    }
+  }
+
+  for(int i=0; i<total_rays.size(); i++){
+    for(int j=0; i<total_rays[i].size(); j++){
+      total_rays[i][j] = local_to_global_ray(total_rays[i][j]);
+    }
+  }
+
+  return total_rays;
+}
