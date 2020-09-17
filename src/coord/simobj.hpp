@@ -18,5 +18,9 @@ namespace coord{
       coord::vector global_to_local_coords(coord::vector coord);
 
       coord::vector local_to_global_coords(coord::vector coord);
+
+      light::Ray global_to_local_ray(light::Ray ray);
+
+      light::Ray local_to_global_ray(light::Ray ray);
   };
 };

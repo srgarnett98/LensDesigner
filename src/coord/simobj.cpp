@@ -47,3 +47,22 @@ coord::vector coord::SimObj::local_to_global_coords(coord::vector coord){
 
   return result;
 }
+
+light::Ray coord::SimObj::global_to_local_ray(light::Ray ray){
+  coords::Vector local_coords = surface.global_to_local_coords(ray.centre);
+  float new_angle = ray.angle - angle;
+
+  light::Ray new_ray;
+  new_ray.centre= local_coords;
+  new_ray.angle = new_angle;
+  return new_ray;
+};
+
+light::Ray coord::SimObj::local_to_global_ray(light::Ray ray){
+  coords::Vector global_coords = surface.local_to_global_coords(ray.centre);
+  float new_angle = ray.angle + angle;
+  light::Ray new_ray;
+  new_ray.centre= global_coords;
+  new_ray.angle = new_angle;
+  return new_ray;
+};
