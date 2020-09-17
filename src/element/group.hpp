@@ -12,15 +12,15 @@ namespace element{
   //dont like the name group, will rename
   class Group: public coord::SimObj{
     public:
-      std::vector<*element::Surface> elements;
+      std::vector<element::Surface *> surfaces;
 
-      void set_elements(std::vector<*element::Surface> elements_);
+      void set_surfaces(std::vector<element::Surface *> surfaces_);
 
-      void append_element(*element::Surface surface);
+      void append_surface(element::Surface *surface);
 
-      void insert_element(*element::Surface surface, int index);
+      void insert_surface(element::Surface *surface, int index);
 
-      element::Surface pop_element(int index);
+      element::Surface * pop_surface(int index);
 
       void append_Group(element::Group group);
 
