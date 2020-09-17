@@ -36,25 +36,6 @@ void element::Surface::set_aperture_size(float aperture_size_){
   aperture_size = aperture_size_;
 }
 
-light::Ray element::Surface::global_to_local_ray(light::Ray ray){
-  coords::Vector local_coords = surface.global_to_local_coords(ray.centre);
-  float new_angle = ray.angle - angle;
-
-  light::Ray new_ray;
-  new_ray.centre= local_coords;
-  new_ray.angle = new_angle;
-  return new_ray;
-};
-
-light::Ray element::Surface::local_to_global_ray(light::Ray ray){
-  coords::Vector global_coords = surface.local_to_global_coords(ray.centre);
-  float new_angle = ray.angle + angle;
-  light::Ray new_ray;
-  new_ray.centre= global_coords;
-  new_ray.angle = new_angle;
-  return new_ray;
-};
-
 light::Ray element::Surface::transfer_func(light::Ray ray_){
   throw "Surface requires valid transfer function";
 };
