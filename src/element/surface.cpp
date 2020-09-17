@@ -1,26 +1,4 @@
 #include "element/surface.hpp"
-/*
-Base class for all Surfaces in the simulation. Lens surfaces, flat surface, aperture etc
-
-  Parameters
-  ----------
-
-      centre = [0.0, 0.0]: [float, float]
-          Coordinates of the centre of the aperture
-
-      angle = 0.0: float in radians
-          Angle of the aperture to the vertical
-
-      element_height: default np.inf
-          A height of a lens or aperture etc.
-          Past this height the behaviour may be undefined
-
-  Methods
-  ----------
-
-      tangent_angle:  float
-          Calculates the tangent to the Surface at a specified height
-*/
 
 void element::Surface::set_values(coord::vector centre_,
                                    float angle_,
@@ -68,31 +46,8 @@ light::Ray element::Surface::local_to_global_ray(light::Ray ray){
   return new_ray;
 }
 
-/*
-A single surface of medium change, presented as a lens surface
+};
 
-  Parameters
-  ----------
-
-      centre = [0.0, 0.0]: [float, float]
-          Coordinates of the centre of the aperture
-
-      angle = 0.0: float in radians
-          Angle of the aperture to the vertical
-
-      element_height: default np.inf
-          A height of a lens or aperture etc.
-          Past this height the behaviour may be undefined
-
-      n1: pointer to function takes wavelength
-
-
-  Methods
-  ----------
-
-      tangent_angle:  float
-          Calculates the tangent to the Surface at a specified height
-*/
 
 void LensSurface::set_values(coord::vector centre_,
                             float (*n1_)(float wavelength),
