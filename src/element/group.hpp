@@ -38,15 +38,16 @@ namespace element{
   };
 
   //lens not a separate class, instead a utility to make a group class?
-  class Lens: public element::Group{
-    public:
-      void set_values(element::LensSurface surface_0,
-                      element::LensSurface surface_1);
-
-      void make_lens(curve::Geometry geometry_0,
-                     curve::Geometry geometry_1,
-                     float (*n1_)(float wavelength),
-                     float (*n2_)(float wavelength),
-                     float (*n3_)(float wavelength));
-  }
+  element::Group make_lens(coord::vector centre,
+                           float angle,
+                           element::Surface *side1,
+                           element::Surface *side2,
+                           float thickness,
+                           float (*n2)(float wavelength),
+                           float (*n1)(float wavelength) = material::air,
+                           float (*n3)(float wavelength) = material::air,
+                           float element_height = 1.0,
+                           int N_sections = 1,
+                           float angle_side1 = 0.0,
+                           float angle_side2 = 0.0)
 }
