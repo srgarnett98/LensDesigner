@@ -36,7 +36,7 @@ element::Surface * element::Group::pop_surface(int index){
 
 void element::Group::append_Group(element::Group group){
   //rotate it first? probably
-  //or leave the rotating to group::insert_surface?
+  //need to rotate each element out of first group
   for(int i=0; i<group.size(); i++){
     append_surface(group[i]);
   }

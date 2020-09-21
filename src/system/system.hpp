@@ -6,7 +6,9 @@ namespace main{
       std::vector<element::Group> groups;
       std::vector<std::vector<light::Ray>> rays;
 
-      void set_values(std::vector<*element::Surface> elements_,
+      float (*calc_total_metric)(std::vector<std::vector<light::Ray>> rays);
+
+      void set_values(std::vector<element::Group> groups_,
                       std::vector<std::vector<light::Ray>> rays);
 
       void set_groups(std::vector<element::Group> groups_);
@@ -17,7 +19,7 @@ namespace main{
 
       element::Group pop_group(int group_index);
 
-      void combine_groups(std::pair start_stop_indexes);
+      void combine_groups(std::pair<int> start_stop_indexes);
 
       void split_group(int group index, int sub_index);
 
@@ -32,5 +34,10 @@ namespace main{
       void set_init_rays(std::vector<light::Ray> rays);
 
       void simulate();
+
+      void simulate_from_index(int index);
+
+      float optimise(std::vector<float *> parameter_pointers,
+                     int first_changed_group = 0);
   }
 }
